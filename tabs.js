@@ -68,5 +68,34 @@ document.addEventListener('DOMContentLoaded', () => {
         // We're appending it to a specific container rather than the body for performance reasons.
         tabsListContainer.appendChild(newTabButton);
         tabsContentContainer.appendChild(newTabContentPanel);
+
+        // Add the event listener to actually make the tab work
+        newTabButton.addEventListener('click', () => ShowTabsContentOnClick(index));
     });
+
+    function ShowTabsContentOnClick(index) {
+        const allTabButtons = document.querySelectorAll('.tabs__button');
+        const allTabPanels = document.querySelectorAll('.tabs__panel');
+
+        allTabButtons.forEach((tabButton, i) => {
+
+            // If it is the tab being clicked.
+            if( i === index ) {
+                tabButton.setAttribute('aria-selected', true);
+                tabButton.classList.add('tabs__button--active');
+            } else {
+                tabButton.setAttribute('aria-selected', false);
+                tabButton.classList.remove('tabs__button--active');
+            }
+        });
+
+        allTabPanels.forEach((tabPanel, i) => {
+
+            if( i === index ) {
+                tabPanel.classList.add('tabs__panel--active');
+            } else {
+                tabPanel.classList.remove('tabs__panel--active');
+            }
+        });
+    }
 });
