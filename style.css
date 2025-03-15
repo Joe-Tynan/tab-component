@@ -19,3 +19,23 @@
     opacity: 1;
     max-height: 1000px;
 }
+
+.tabs__button {
+    position: relative;
+}
+
+.tabs__button::before {
+    display: none;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: var(--active-tab-border);
+    box-shadow: 0 4px 4px rgba(var(--black) 0.25);
+}
+
+.tabs__button--active::before {
+    display: block;
+}
