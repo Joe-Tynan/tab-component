@@ -6,22 +6,40 @@
     --active-tab-border: #06A7A9;
 }
 
-.tabs__panel {
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: opacity 0.5s ease-in-out;
+html,
+body {
+    height: 100vh;
+    margin: 0;
 }
 
-.tabs__panel--active {
-    padding: 36px 24px;
-    background-color: var(--white);
-    opacity: 1;
-    max-height: 1000px;
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-primary);
+    background-color: var(--light-grey);
+    font-family: sans-serif;
+}
+
+.tabs__container {
+    width: 90vw;
+    max-width: 1600px;
 }
 
 .tabs__button {
     position: relative;
+    border: 0;
+    color: inherit;
+    padding: 12px 18px;
+    background-color: var(--light-grey);
+    margin-left: 1px;
+    transition: all 0.5s ease-in-out;
+}
+
+.tabs__button:nth-last-of-type {
+    margin-left: 0;
 }
 
 .tabs__button::before {
@@ -36,6 +54,45 @@
     box-shadow: 0 4px 4px rgba(var(--black) 0.25);
 }
 
+.tabs__button--active {
+    background-color: var(--white);
+}
+
 .tabs__button--active::before {
     display: block;
+}
+
+.tabs__button:hover {
+    cursor: pointer;
+    background-color: var(--white);
+}
+
+.tabs__panel {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.tabs__panel--active {
+    padding: 36px 24px;
+    background-color: var(--white);
+    opacity: 1;
+    max-height: 1000px;
+}
+
+.tabs__title {
+    margin: 0 0 12px;
+}
+
+.tabs__content {
+    margin: 0;
+}
+
+/* Tablet and above breakpoint */
+@media screen and (min-width: 768px) {
+
+    .tabs__button {
+        padding: 24px 48px;
+    }
 }
