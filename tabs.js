@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // We do this outside of the loop for performance reasons. Loops are expensive!
     const tabsContentContainer = document.querySelector('.tabs__container')
     const tabsListContainer = document.querySelector('.tabs__list');
+    
+    let KeyboardControlsIndex = 0;
 
     // Main loop to create the HTML for each tab that's been received from the CMS dynamically rather than being hardcoded.
     tabContentFromCMS.forEach((tabContent, index) => {
@@ -53,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <p class='tabs__content'>${tabContent.panelContent}</p>`;
 
         newTabContentPanel.setAttribute('role', 'tabpanel');
+        newTabContentPanel.setAttribute('tabindex', -1);
         newTabContentPanel.setAttribute('aria-labelledby', `tab-button-${index}`);
 
         // Set the first tab & panel to be active by default for a better UX. Otherwise it would look a little bit strange!
@@ -60,8 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
             newTabButton.classList.add('tabs__button--active');
             newTabContentPanel.classList.add('tabs__panel--active');
             newTabButton.setAttribute('aria-selected', 'true');
+            newTabContentPanel.setAttribute('tabindex', 0);
         } else {
             newTabButton.setAttribute('aria-selected', 'false');
+            newTabButton.setAttribute('tabindex', -1);
         }
 
         // Actually append this html to the DOM now so we can see it!
@@ -71,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Add the event listener to actually make the tab work
         newTabButton.addEventListener('click', () => ShowTabsContentOnClick(index));
+        newTabButton.addEventListener('keydown', (event) => onkeydown(event, index));
     });
 
     function ShowTabsContentOnClick(index) {
@@ -83,9 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if( i === index ) {
                 tabButton.setAttribute('aria-selected', true);
                 tabButton.classList.add('tabs__button--active');
+                tabButton.removeAttribute('tabindex');
             } else {
                 tabButton.setAttribute('aria-selected', false);
                 tabButton.classList.remove('tabs__button--active');
+                tabButton.setAttribute('tabindex', -1);
             }
         });
 
@@ -93,9 +101,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if( i === index ) {
                 tabPanel.classList.add('tabs__panel--active');
+                tabPanel.setAttribute('tabindex', 0);
             } else {
                 tabPanel.classList.remove('tabs__panel--active');
+                tabPanel.setAttribute('tabindex', -1);
             }
         });
+    }
+
+    function onkeydown(event, index) {
+        const currentButton = event.currentTarget;
+
+        switch (event.key) {
+            case 'ArrowLeft':
+                if(KeyboardControlsIndex > 0) {
+                    KeyboardControlsIndex -= 1;
+                } else {
+                    KeyboardControlsIndex = tabContentFromCMS.length - 1;
+                }
+                console.log(KeyboardControlsIndex);
+                ShowTabsContentOnClick(KeyboardControlsIndex);
+              break;
+      
+            case 'ArrowRight':
+                if(KeyboardControlsIndex < tabContentFromCMS.length - 1) {
+                    KeyboardControlsIndex += 1;
+                } else {
+                    KeyboardControlsIndex = 0;
+                }
+                console.log(KeyboardControlsIndex);
+                ShowTabsContentOnClick(KeyboardControlsIndex);
+              break;
+
+            case 'Home':
+                KeyboardControlsIndex = 0;
+                ShowTabsContentOnClick(KeyboardControlsIndex);
+                break;
+        
+            case 'End':
+                KeyboardControlsIndex = tabContentFromCMS.length - 1;
+                ShowTabsContentOnClick(KeyboardControlsIndex);
+                break;
+      
+            default:
+              break;
+          }
+        
     }
 });
